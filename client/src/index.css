@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rural-green: #2D5A27;
+  --color-earth-brown: #5C4033;
+  --color-clay-beige: #E8E0D5;
+  --font-sans: "Noto Sans", sans-serif;
+}
+
+body {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+}
