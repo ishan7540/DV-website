@@ -5,12 +5,22 @@ import { useFieldState } from '../../context/FieldStateContext';
 import { calculateFertilizerNeeds } from '../../utils/fertilizerCalc';
 
 const FertilizerPredictor = () => {
-    const { pulseData, loading } = useFieldState();
+    const { predictionData, predictionLoading, loading } = useFieldState();
     const [selectedCrop, setSelectedCrop] = useState('Wheat');
 
-    if (loading) return <div className="h-full bg-white/60 rounded-3xl animate-pulse" />;
+    if (loading || predictionLoading) return <div className="h-full bg-white/60 rounded-3xl animate-pulse" />;
 
-    const currentNPK = pulseData || { nitrogen: 0, phosphorus: 0, potassium: 0 };
+    // Use predicted NPK values from Flask API
+    let currentNPK = { nitrogen: 0, phosphorus: 0, potassium: 0 };
+    if (predictionData && predictionData['Prediction (NPK)']) {
+        const pred = predictionData['Prediction (NPK)'];
+        currentNPK = {
+            nitrogen: pred.N || 0,
+            phosphorus: pred.P || 0,
+            potassium: pred.K || 0
+        };
+    }
+
     const { bags, gap } = calculateFertilizerNeeds(currentNPK, selectedCrop);
 
     // Animation variants for Zero-G effect
